@@ -1,0 +1,147 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP Nails - Diseños y Citas</title>
+    <link rel="stylesheet" href="../static/Style/estilos.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+        </div>
+        <a href="/dashboard" class="back-button" aria-label="Volver al inicio">
+            <i data-lucide="arrow-left"></i>
+            </a>
+        <nav>
+            
+            <button id="logoutBtn" class="nav-button logout-button">
+                <i data-lucide="log-out"></i>
+                Cerrar Sesión
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <input type="text" class="search-bar" placeholder="Buscar diseños...">
+
+        <div class="designs-grid" id="designsGrid">
+            <!-- Los diseños se cargarán aquí dinámicamente -->
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 TOP Nails. Todos los derechos reservados.</p>
+    </footer>
+
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Agendar Cita</h2>
+            <p id="selectedDesign"></p>
+            <form id="bookingForm">
+                <label for="date">Fecha:</label>
+                <input type="date" id="date" required><br><br>
+                <label for="time">Hora:</label>
+                <input type="time" id="time" required><br><br>
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" required><br><br>
+                <label for="email">Email:</label>
+                <input type="email" id="email" required><br><br>
+                <label for="phone">Teléfono:</label>
+                <input type="tel" id="phone" required><br><br>
+                <button type="submit" class="select-btn">Confirmar Cita</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        const designs = [
+            { id: 1, name: 'Esmalte Normal', image: '../static/img/esmaltenormal.jpeg' },
+            { id: 2, name: 'Uñas Francesas', image: '../static/img/francesa.jpg' },
+            { id: 3, name: 'Francesas-Variante', image: '../static/img/variante.jpeg' },
+            { id: 4, name: 'Uñas Ombré', image: '../static/img/ombre.jpeg' },
+            { id: 5, name: 'Efectos Holográficos', image: '../static/img/holografico.jpg' },
+            { id: 6, name: 'Uñas con Nail Art', image: '../static/img/arte.jpg' },
+            { id: 7, name: 'Uñas Marmoladas', image: '../static/img/marmolada.jpg' },
+            { id: 8, name: 'Uñas con Efecto Espejo', image: '../static/img/espejo.jpg' },
+            { id: 9, name: 'Uñas con Glitter', image: '../static/img/glitter.jpg' },
+            { id: 10, name: 'Servicios adicionales', image: '../static/img/otros.jpg' },
+
+        ];
+
+        const designsGrid = document.getElementById('designsGrid');
+        const modal = document.getElementById('bookingModal');
+        const closeBtn = document.getElementsByClassName('close')[0];
+        const bookingForm = document.getElementById('bookingForm');
+        const selectedDesignText = document.getElementById('selectedDesign');
+        const searchBar = document.querySelector('.search-bar');
+
+        function loadDesigns(filteredDesigns = designs) {
+            designsGrid.innerHTML = '';
+            if (filteredDesigns.length > 0) {
+                filteredDesigns.forEach(design => {
+                    const card = document.createElement('div');
+                    card.className = 'design-card';
+                    card.innerHTML = `
+                    <img src="${design.image}" alt="${design.name}">
+                        <div class="design-info">
+                            <h3>${design.name}</h3>
+                            <button class="select-btn" onclick="openModal('${design.name}')">Seleccionar y Reservar</button>
+                        </div>
+                        `;
+                    designsGrid.appendChild(card);
+                });
+            } else {
+                designsGrid.innerHTML = '<p>No hay resultados</p>';
+            }
+        }
+
+        function openModal(designName) {
+            modal.style.display = 'block';
+            selectedDesignText.textContent = `Diseño seleccionado: ${designName}`;
+        }
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.onclick = function() {
+        if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+            window.location.href = '/logout';
+        }
+    }
+
+        bookingForm.onsubmit = function(e) {
+            e.preventDefault();
+            alert('¡Cita confirmada! Gracias por reservar con nosotros.');
+            modal.style.display = 'none';
+            bookingForm.reset();
+        }
+
+        // Función para filtrar los diseños según la búsqueda
+        searchBar.addEventListener('input', function() {
+            const searchText = searchBar.value.toLowerCase();
+            const filteredDesigns = designs.filter(design => design.name.toLowerCase().includes(searchText));
+            loadDesigns(filteredDesigns);
+        });
+
+        // Cargar los diseños inicialmente
+        lucide.createIcons();
+        loadDesigns();
+    </script>
+    <script src="/static/valores.js"></script>
+</body>
+</html>

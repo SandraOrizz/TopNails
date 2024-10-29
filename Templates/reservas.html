@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP Nails - Mis Reservaciones</title>
+    <link rel="stylesheet" href="../static/Style/reservas.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    
+    <header>
+        <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+        </div>
+        <a href="/dashboard" class="back-button" aria-label="Volver al inicio">
+            <i data-lucide="arrow-left"></i>
+            </a>
+        <h1 class="page-title">MIS RESERVACIONES</h1>
+        <nav>
+               <button id="logoutBtn" class="nav-button logout-button">
+                <i data-lucide="log-out"></i>
+                <span class="button-text">Cerrar Sesión</span>
+            </button>
+        </nav>
+    </header>
+    <main>
+        <input type="text" class="search-bar" placeholder="Buscar reservaciones...">
+
+        <div class="reservations-grid" id="reservationsGrid">
+            <!-- Las reservaciones se cargarán aquí dinámicamente -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TOP Nails. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        const reservations = [
+            { id: 1, design: 'Francés Clásico', date: '2024-03-15', time: '14:00', name: 'María García' },
+            { id: 2, design: 'Ombré con Brillo', date: '2024-03-18', time: '10:30', name: 'Ana Rodríguez' },
+            { id: 3, design: 'Arte Floral', date: '2024-03-20', time: '16:00', name: 'Laura Martínez' },
+        ];
+
+        const reservationsGrid = document.getElementById('reservationsGrid');
+        const searchBar = document.querySelector('.search-bar');
+
+        function loadReservations(filteredReservations = reservations) {
+            reservationsGrid.innerHTML = '';
+            if (filteredReservations.length > 0) {
+                filteredReservations.forEach(reservation => {
+                    const card = document.createElement('div');
+                    card.className = 'reservation-card';
+                    card.innerHTML = `
+                        <div class="reservation-info">
+                            <h3>${reservation.design}</h3>
+                            <p>Fecha: ${reservation.date}</p>
+                            <p>Hora: ${reservation.time}</p>
+                            <p>Cliente: ${reservation.name}</p>
+                        </div>
+                        <button class="cancel-btn" onclick="cancelReservation(${reservation.id})">Cancelar Reserva</button>
+                    `;
+                    reservationsGrid.appendChild(card);
+                });
+            } else {
+                reservationsGrid.innerHTML = '<p>No hay reservaciones</p>';
+            }
+        }
+
+        function cancelReservation(id) {
+            if (confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
+                // Aquí iría la lógica para cancelar la reserva en el servidor
+                alert('Reserva cancelada');
+                // Actualizamos la lista de reservas (simulado)
+                reservations = reservations.filter(reservation => reservation.id !== id);
+                loadReservations();
+            }
+        }
+
+        const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.onclick = function() {
+        if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+            window.location.href = '/logout';
+        }
+    }
+
+        // Función para filtrar las reservaciones según la búsqueda
+        searchBar.addEventListener('input', function() {
+            const searchText = searchBar.value.toLowerCase();
+            const filteredReservations = reservations.filter(reservation => 
+                reservation.design.toLowerCase().includes(searchText) ||
+                reservation.name.toLowerCase().includes(searchText) ||
+                reservation.date.includes(searchText)
+            );
+            loadReservations(filteredReservations);
+        });
+
+        // Cargar las reservaciones inicialmente
+        lucide.createIcons();
+        loadReservations();
+    </script>
+</body>
+</html>

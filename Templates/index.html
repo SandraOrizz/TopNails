@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOP Nails - Diseños y Citas</title>
+    <link rel="stylesheet" href="../static/Style/estilos.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+        </div>
+        <a href="/dashboard" class="back-button" aria-label="Volver al inicio">
+            <i data-lucide="arrow-left"></i>
+            </a>
+        <nav>
+            
+            <button id="logoutBtn" class="nav-button logout-button">
+                <i data-lucide="log-out"></i>
+                Cerrar Sesión
+            </button>
+        </nav>
+    </header>
+      
+    <main>
+        <input type="text" class="search-bar" placeholder="Buscar diseños...">
+
+        <div class="designs-grid" id="designsGrid">
+            <!-- Los diseños se cargarán aquí dinámicamente -->
+        </div>
+    </main>
+
+
+    <script>
+        const designs = [
+            { id: 1, name: 'Manicura Básica', image: '../static/img/natural.jpg' },
+            { id: 2, name: 'Pedicura Básica', image: '../static/img/pie.jpg' },
+            { id: 3, name: 'Uñas Acrílicas', image: '../static/img/acrilica.jpg' },
+            { id: 4, name: 'Uñas Polygel', image: '../static/img/polygel.jpeg' },
+           
+        ];
+
+        const designsGrid = document.getElementById('designsGrid');
+        const searchBar = document.querySelector('.search-bar');
+
+        function loadDesigns(filteredDesigns = designs) {
+            designsGrid.innerHTML = '';
+            if (filteredDesigns.length > 0) {
+                filteredDesigns.forEach(design => {
+                    const card = document.createElement('div');
+                    card.className = 'design-card';
+                    card.innerHTML = `
+                        <img src="${design.image}" alt="${design.name}">
+                        <div class="design-info">
+                            <h3>${design.name}</h3>
+                            <form action="/disenios" method="get">
+    <button type="submit" class="select-btn">Seleccionar</button>
+</form>
+                        </div>
+                    `;
+                    designsGrid.appendChild(card);
+                });
+            } else {
+                designsGrid.innerHTML = '<p>No hay resultados</p>';
+            }
+        }
+
+        const logoutBtn = document.getElementById('logoutBtn');
+    logoutBtn.onclick = function() {
+        if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+            window.location.href = '/logout';
+        }
+    }
+
+        searchBar.addEventListener('input', function() {
+            const searchText = searchBar.value.toLowerCase();
+            const filteredDesigns = designs.filter(design => design.name.toLowerCase().includes(searchText));
+            loadDesigns(filteredDesigns);
+        });
+
+        // Cargar los diseños inicialmente
+        lucide.createIcons();
+        loadDesigns();
+    </script>
+   
+    <footer>
+        <p>&copy; 2024 TOP Nails. Todos los derechos reservados.</p>
+    </footer>
+    <script src="/static/valores.js"></script>
+</body>
+</html>
