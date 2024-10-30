@@ -1,0 +1,144 @@
+:root {
+    --primary-color: #ff69b4;
+    --secondary-color: #f8c3d3;
+    --text-color: #333;
+    --background-color: #fff;
+    --input-bg: #f0f0f0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+.login-box {
+    background-color: var(--background-color);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 10px 25px var(--shadow-color);
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0px;
+}
+
+.logo-img {
+    width: 150px;
+    height: auto;
+}
+
+h2 {
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: none;
+    background-color: var(--input-bg);
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #ff1493;
+}
+
+.extra-options {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.extra-options a {
+    display: block;
+    color: var(--text-color);
+    text-decoration: none;
+    margin-top: 10px;
+    transition: color 0.3s ease;
+}
+
+.extra-options a:hover {
+    color: var(--primary-color);
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    .login-box {
+        padding: 30px;
+    }
+
+    .logo-img {
+        width: 100px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        font-size: 0.9rem;
+    }
+
+    button {
+        font-size: 0.9rem;
+    }
+}
