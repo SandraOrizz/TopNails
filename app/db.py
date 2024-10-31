@@ -5,6 +5,6 @@ def conectar():
         host='localhost',   # Cambia por tu host de MySQL
         user='root',        # Cambia por tu usuario de MySQL
         password='M4tsum0t017*',        # Cambia por tu contraseña de MySQL
-        database='unia'  # Cambia por tu base de datos
+        database='topNails'  # Cambia por tu base de datos
     )
     return conn

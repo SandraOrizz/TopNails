@@ -12,10 +12,10 @@
     <div class="container">
         <div class="login-box">
             <div class="logo">
-                <img <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+                <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
             </div>
-                        <h2>Iniciar Sesión</h2>
-            <form method="post" action="/login"">
+            <h2>Iniciar Sesión</h2>
+            <form method="post" action="/login">
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" id="username" name="username" placeholder="Nombre de Usuario" required>
@@ -23,6 +23,14 @@
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" id="password" name="password" placeholder="Contraseña" required>
+                </div>
+                <div class="input-group">
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Selecciona tu rol</option>
+                        <option value="1">Administrador</option>
+                        <option value="2">Cliente</option>
+                        <option value="3">Empleado</option>
+                    </select>
                 </div>
                 <button type="submit">Iniciar Sesión</button>
             </form>
