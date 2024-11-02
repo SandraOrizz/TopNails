@@ -1,6 +1,6 @@
 from flask import Flask
 from app.db import conectar
-from app.routers import auth_routes, dashboard_routes, other_routes
+from app.routers import auth_routes, dashboard_routes, other_routes, admin_routes  
 
 def create_app():
     app = Flask(__name__)
@@ -9,5 +9,6 @@ def create_app():
     app.register_blueprint(auth_routes.bp)
     app.register_blueprint(dashboard_routes.bp)
     app.register_blueprint(other_routes.bp)
+    app.register_blueprint(admin_routes.bp)  
 
     return app

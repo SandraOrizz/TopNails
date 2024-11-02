@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <p>Seleccione una opción para comenzar:</p>
+
+    <!-- Botón para agregar un nuevo usuario -->
+    <a href="{{ url_for('admin.create_user') }}">Agregar Usuario</a>
+    <br>
+    <a href="{{ url_for('admin.create_servicio') }}">Agregar Servicio</a>
+    <br>
+    <a href="{{ url_for('admin.create_producto') }}">Agregar Producto</a>
+    <br>
+
+
+</body>
+</html>

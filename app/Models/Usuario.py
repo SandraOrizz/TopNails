@@ -17,15 +17,18 @@ class Usuario:
             return {'idUsuario': user[0], 'idPersona': user[1]}
         return None
 
+   
     @staticmethod
-    def create_user(username, hashed_password):
+    def create_user(user_data):
         conn = conectar()
         cursor = conn.cursor()
-        query = "INSERT INTO USUARIO (UserName, Clave, Estado) VALUES (%s, %s, 1)"
-        cursor.execute(query, (username, hashed_password))
+        query = "INSERT INTO USUARIO (UserName, Clave, Estado, idPersona) VALUES (%s, %s, 1, %s)"
+        cursor.execute(query, (user_data['username'], user_data['password'], user_data['idPersona']))
         conn.commit()
+        user_id = cursor.lastrowid  # Obtener el ID del usuario recién creado
         cursor.close()
         conn.close()
+        return user_id  # Devolver el ID del usuario
 
     @staticmethod
     def update_password(username, hashed_password):
@@ -39,7 +42,7 @@ class Usuario:
     @staticmethod
     def get_roles_by_user(user_id):
  
-        print(user_id)
+      
         
         conn = conectar()
         cursor = conn.cursor()
@@ -61,3 +64,13 @@ class Usuario:
         # Devuelve una lista de IDs de rol
         print(row[0] for row in result)
         return [row[0] for row in result]   # Asegúrate de que 'idrol' esté correctamente referenciado
+    @staticmethod
+    def assign_role_to_user(user_id, role_id):
+        conn = conectar()
+        cursor = conn.cursor()
+        query = "INSERT INTO rolUsuario (idUsuario, idRol) VALUES (%s, %s)"
+        cursor.execute(query, (user_id, role_id))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True  # Asumir que la inserción fue exitosa

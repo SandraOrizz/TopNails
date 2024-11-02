@@ -25,12 +25,16 @@ class Persona:
         return persona_id
 
     @staticmethod
-    def get_persona_by_id(idPersona):
+    def create_persona(Nombre, Apellido, Cumple, TipoPersonal):
         conn = conectar()
         cursor = conn.cursor()
-        query = "SELECT * FROM PERSONA WHERE idPersona = %s"
-        cursor.execute(query, (idPersona,))
-        persona = cursor.fetchone()
+        query = """
+        INSERT INTO PERSONA (Nombre, Apellido, Cumple, TipoPersonal)
+        VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(query, (Nombre, Apellido, Cumple, TipoPersonal))
+        conn.commit()
+        persona_id = cursor.lastrowid
         cursor.close()
         conn.close()
-        return persona
+        return persona_id
