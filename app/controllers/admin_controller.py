@@ -2,6 +2,7 @@ from flask import session, request, flash, redirect, url_for
 from app.Models.Persona import Persona
 from app.Models.Usuario import Usuario
 from app.Models.Cliente import Cliente  # Asegúrate de importar el modelo Cliente
+from app.Models.Empleado import Empleado  # Importa el modelo Empleado
 from app.Models.Servicio import Servicio
 from app.Models.Producto import Producto
 import hashlib
@@ -25,13 +26,20 @@ class AdminController:
             # Crear nueva persona en la base de datos
             persona_id = Persona.create_persona(first_name, last_name, birthdate, tipo_personal)
             if not persona_id:
-                flash("Error al crear persona", "error")
+                print("Error al crear persona", "error")
                 return False
 
             # Si el rol es Cliente, crear un registro en la tabla CLIENTE
             if role_id == '2':  # ID del rol de Cliente
                 if not Cliente.create_cliente(persona_id):  # Llama al método para crear cliente
-                    flash("Error al crear cliente", "error")
+                    print("Error al crear cliente", "error")
+                    return False
+
+            # Si el rol es Empleado, crear un registro en la tabla EMPLEADO
+            if role_id == '3':  # ID del rol de Empleado
+                # Aquí puedes manejar la creación de un empleado
+                if not Empleado.create_employee(persona_id):  # Crea el empleado
+                    print("Error al crear empleado", "error")
                     return False
 
             # Crear el nombre de usuario: primera letra del nombre + apellido
@@ -64,9 +72,9 @@ class AdminController:
             return False
         
     @staticmethod  
-    def insert_producto(nombre,descripcion,precio):
-        return Producto.create_producto(nombre,descripcion,precio)
+    def insert_producto(nombre, descripcion, precio):
+        return Producto.create_producto(nombre, descripcion, precio)
 
     @staticmethod
-    def insert_servicio(nombre,descripcion,costo):
-        return Servicio.create_servicio(nombre,descripcion, costo)
+    def insert_servicio(nombre, descripcion, costo):
+        return Servicio.create_servicio(nombre, descripcion, costo)

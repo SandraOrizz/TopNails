@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios Disponibles</title>
+</head>
+<body>
+    <h1>Servicios Disponibles</h1>
+
+    <ul>
+        {% for service in services %}
+            <li>
+                <strong>{{ service.Nombre }}</strong>: {{ service.Descripcion }} - Precio: ${{ service.Precio }}
+            </li>
+        {% else %}
+            <li>No hay servicios disponibles en este momento.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('client.schedule_appointment') }}">Agendar Cita</a>
+</body>
+</html>

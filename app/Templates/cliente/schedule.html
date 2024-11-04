@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Cita</title>
+</head>
+<body>
+    <h1>Agendar Cita</h1>
+
+    <form action="{{ url_for('client.schedule_appointment') }}" method="POST">
+        <label for="service_id">Selecciona un Servicio:</label>
+        <select name="service_id" id="service_id" required>
+            {% for service in services %}
+                <option value="{{ service.idServicio }}">{{ service.Nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="product_id">Selecciona un Producto:</label>
+        <select name="product_id" id="product_id" required>
+            {% for product in products %}
+                <option value="{{ product.idProducto }}">{{ product.Nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="date">Fecha:</label>
+        <input type="date" name="date" id="date" required>
+
+        <label for="time">Hora:</label>
+        <input type="time" name="time" id="time" required>
+
+        <button type="submit">Agendar Cita</button>
+    </form>
+
+    <a href="{{ url_for('client.view_appointments') }}">Ver Mis Citas</a>
+</body>
+</html>

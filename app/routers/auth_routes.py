@@ -7,12 +7,11 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        role_id = request.form['role']  # Obtén el rol seleccionado
+        role_id = request.form['role']
 
-        if AuthController.login_user(username, password, role_id):  # Pasar role_id a la función
-            session['username'] = username
-            session['role'] = role_id  # Guardar el rol en la sesión
-            
+        persona_id = AuthController.login_user(username, password, role_id)  # Captura el idPersona
+        if persona_id:  # Si el inicio de sesión fue exitoso
+            session['persona_id'] = persona_id  # (Ya se guarda en AuthController, pero aquí está por si acaso)
             # Redirigir según el rol
             if role_id == '1':  # Administrador
                 return redirect(url_for('auth.admin_home'))

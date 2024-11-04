@@ -6,15 +6,15 @@ from app.Models.Usuario import Usuario
 
 class AuthController:
     @staticmethod
-    def login_user(username, password, role_id):  # Agregamos role_id como tercer argumento
+    def login_user(username, password, role_id):
         # Hashear la contraseña antes de buscar
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
         user = Usuario.find_user_by_credentials(username, hashed_password)
-      
+
         if user:
-           
-            # Aquí podrías verificar si el rol del usuario coincide con el role_id proporcionado.
+            # Verifica los roles del usuario
             roles = Usuario.get_roles_by_user(user['idUsuario'])
+
             # Convertir role_id a entero si es de tipo str
             if isinstance(role_id, str):
                 try:
@@ -25,18 +25,19 @@ class AuthController:
 
             # Asegúrate de que roles contenga enteros
             roles = [int(role) for role in roles]  # Convertir roles a enteros
-           
+
             # Verificar si role_id está en roles
-            if role_id in roles:  # Verifica que el rol sea uno de los roles del usuario
+            if role_id in roles:
                 session['user_id'] = user['idUsuario']
-                session['persona_id'] = user['idPersona']
+                session['persona_id'] = user['idPersona']  # Guarda el idPersona en la sesión
                 session['roles'] = roles  # Guardar roles en la sesión
                 session['role'] = role_id   # Almacena el rol seleccionado en la sesión
 
-                return True
+                return user['idPersona']  # Devuelve el idPersona
             else:
                 print("Rol no autorizado")
                 return False  # Rol no autorizado
+
         return False  # Usuario no encontrado
 
     @staticmethod
