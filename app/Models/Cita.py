@@ -96,3 +96,54 @@ class Cita:
         }
         for row in appointments
     ]
+        
+    @staticmethod
+    def get_citas_by_idEmpleado(IdEmpleado):
+        conn = conectar()
+        cursor = conn.cursor()
+        query = """
+            SELECT 
+                CONCAT(cli_persona.Nombre, ' ', cli_persona.Apellido) AS NombreCliente,
+                s.Nombre AS Servicio,
+                p.Nombre AS Producto,
+                CONCAT(emp_persona.Nombre, ' ', emp_persona.Apellido) AS EmpleadoResponsable,
+                c.FechaCita,
+                c.SesionInicio,
+                c.SesionFin,
+                c.Precio
+            FROM 
+                CITA c
+            JOIN 
+                CLIENTE cli ON c.idCliente = cli.idCliente
+            JOIN 
+                PERSONA cli_persona ON cli.idPersona = cli_persona.idPersona
+            JOIN 
+                SERVICIO s ON c.idServicio = s.idServicio
+            JOIN 
+                PRODUCTO p ON c.idProducto = p.idProducto
+            JOIN 
+                EMPLEADO e ON c.idEmpleado = e.idEmpleado
+            JOIN 
+                PERSONA emp_persona ON e.idPersona = emp_persona.idPersona
+            JOIN 
+                ESTADO est ON c.idEstado = est.idEstado
+            WHERE 
+                est.Descripcion = 'Pendiente' AND e.idEmpleado = %s
+        """
+        cursor.execute(query, (IdEmpleado,)) 
+        citas = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return [
+            {
+                'NombreCliente': row[0],
+                'Servicio': row[1],
+                'Producto': row[2],
+                'EmpleadoResponsable': row[3],
+                'FechaCita': row[4],
+                'SesionInicio': row[5],
+                'SesionFin': row[6],
+                'Precio': row[7]
+            }
+            for row in citas
+        ]
