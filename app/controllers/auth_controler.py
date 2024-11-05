@@ -51,12 +51,11 @@ class AuthController:
 
     @staticmethod
     def change_password(username, current_password, new_password):
-        # Verificar la contraseña actual
+        
         hashed_current_password = hashlib.sha256(current_password.encode()).hexdigest()
         user = Usuario.find_user_by_credentials(username, hashed_current_password)
-        
         if user:
             hashed_new_password = hashlib.sha256(new_password.encode()).hexdigest()
             Usuario.update_password(username, hashed_new_password)
-            return "Contraseña actualizada correctamente"
+            return"Contraseña actualizada correctamente"
         return "La contraseña actual no es correcta"

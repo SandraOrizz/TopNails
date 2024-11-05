@@ -10,10 +10,12 @@ def home():
 def index():
     return render_template('index.html')
 
-@bp.route('/reservas')
+@bp.route('/logoff')
 def reservas():
     return render_template('reservas.html')
 
 @bp.route('/disenios')
 def disenios():
     return render_template('disenios.html')
+
+

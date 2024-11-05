@@ -16,8 +16,20 @@ class Usuario:
         if user:
             return {'idUsuario': user[0], 'idPersona': user[1]}
         return None
+    @staticmethod
+    def get_username_by_id(id_User):
+        conn = conectar()
+        cursor = conn.cursor()
+        query = "SELECT username FROM USUARIO WHERE idusuario = %s"
+        cursor.execute(query, (id_User,))  # Correcto: la coma crea una tupla de un solo elemento
+        username = cursor.fetchone()  # Usar fetchone() para obtener un solo resultado
+        cursor.close()
+        conn.close()
+        return username[0] if username else None  # Extrae el valor si existe
 
-   
+        
+    
+    
     @staticmethod
     def create_user(user_data):
         conn = conectar()
@@ -39,6 +51,8 @@ class Usuario:
         conn.commit()
         cursor.close()
         conn.close()
+        print("cambio")
+        
     @staticmethod
     def get_roles_by_user(user_id):
  

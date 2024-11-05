@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from  app.controllers.auth_controler import AuthController
+from app.Models.Usuario import Usuario
 bp = Blueprint('auth', __name__)
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -60,16 +61,24 @@ def logout():
 @bp.route('/change_password', methods=['GET', 'POST'])
 def change_password():
     if request.method == 'POST':
-        username = session.get('username')
+        user_id = session.get('user_id')
         current_password = request.form['current_password']
         new_password = request.form['new_password']
 
+        username = Usuario.get_username_by_id(user_id)
         if not username:
             return redirect(url_for('auth.login'))
 
+        # Cambiar la contraseña usando el controlador de autenticación
         result = AuthController.change_password(username, current_password, new_password)
+        
         if result == "Contraseña actualizada correctamente":
-            return redirect(url_for('auth.dashboard'))  # Cambia según tu ruta
+            # Eliminar los datos de sesión
+            session.pop('user_id', None)
+            session.pop('persona_id', None)
+            session.pop('role', None)
+            flash("Contraseña actualizada correctamente. Por favor, vuelve a iniciar sesión.", "success")
+            return redirect(url_for('auth.login'))
         else:
             flash(result, "error")
 
