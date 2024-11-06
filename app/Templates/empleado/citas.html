@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citas del Empleado</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Citas Asignadas</h1>
+
+    {% if citas %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Servicio</th>
+                    <th>Producto</th>
+                    <th>Empleado Responsable</th>
+                    <th>Fecha de Cita</th>
+                    <th>Hora de Inicio</th>
+                    <th>Hora de Fin</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.NombreCliente }}</td>
+                    <td>{{ cita.Servicio }}</td>
+                    <td>{{ cita.Producto }}</td>
+                    <td>{{ cita.EmpleadoResponsable }}</td>
+                    <td>{{ cita.FechaCita }}</td>
+                    <td>{{ cita.SesionInicio }}</td>
+                    <td>{{ cita.SesionFin }}</td>
+                    <td>{{ cita.Precio }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No tienes citas asignadas.</p>
+    {% endif %}
+
+    <br>
+    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+
+</body>
+</html>

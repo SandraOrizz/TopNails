@@ -1,17 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=\, initial-scale=1.0">
-    <title>Empleado</title>
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=\, initial-scale=1.0">
+        <title>Empleado</title>
+    </head>
+    <body>
 
 
-    
-    <a href="{{ url_for('auth.change_password') }}">Cambiar clave</a>
-    <br>
-    <a href="{{ url_for('auth.logout') }}">Cerrar sesion</a>
-    <br>
-</body>
-</html>
+        
+        <a href="{{ url_for('auth.change_password') }}">Cambiar clave</a>
+        <br>
+        <a href="{{ url_for('auth.logout') }}">Cerrar sesion</a>
+        <br>
+
+        <a href="{{ url_for('empleado.citas') }}">ver citas</a>
+
+        <br>
+    </body>
+    </html>

@@ -22,7 +22,7 @@ class Empleado:
         conn=conectar()
         cursor=conn.cursor()
         query="SELECT e.idEmpleado FROM USUARIO u JOIN  PERSONA p ON u.idPersona = p.idPersona JOIN   EMPLEADO e ON p.idPersona = e.idPersona WHERE u.idUsuario = %s "
-        cursor.execute(query,idUser)
+        cursor.execute(query,(idUser,))
         idEmpleado=cursor.fetchone()
         cursor.close()
         conn.close()
