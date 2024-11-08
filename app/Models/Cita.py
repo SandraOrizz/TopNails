@@ -62,41 +62,57 @@ class Cita:
         cursor.close()
         conn.close()
         return result[0] == 0
+    
     @staticmethod
     def get_appointments_by_client(client_id):
-        print("cliente id:")
-        print(client_id)
         conn = conectar()
         cursor = conn.cursor()
         query = """
-        SELECT C.idCita, S.Nombre AS Servicio, P.Nombre AS Producto, 
-            E.Descripcion AS Estado, C.FechaCita, C.SesionInicio, 
-            C.SesionFin, C.Precio
-        FROM CITA C
-        JOIN SERVICIO S ON C.idServicio = S.idServicio
-        JOIN PRODUCTO P ON C.idProducto = P.idProducto
-        JOIN ESTADO E ON C.idEstado = E.idEstado
-        WHERE C.idCliente = %s
-        ORDER BY C.FechaCita DESC
+                    SELECT 
+                c.idCita AS CitaID,
+                s.Nombre AS Servicio,
+                p.Nombre AS Producto,
+                c.FechaCita AS Fecha,
+                c.SesionInicio AS HoraInicio,
+                CONCAT(persona_emp.Nombre, ' ', persona_emp.Apellido) AS Responsable,
+                e.Descripcion AS Estado,
+                c.Precio AS Precio
+            FROM 
+                CITA c
+            JOIN 
+                CLIENTE cli ON c.idCliente = cli.idCliente
+            JOIN 
+                PRODUCTO p ON c.idProducto = p.idProducto
+            JOIN 
+                EMPLEADO emp ON c.idEmpleado = emp.idEmpleado
+            JOIN 
+                PERSONA persona_emp ON emp.idPersona = persona_emp.idPersona
+            JOIN 
+                ESTADO e ON c.idEstado = e.idEstado
+            JOIN 
+                SERVICIO s ON c.idServicio = s.idServicio
+            WHERE 
+                cli.idCliente = %s
+
         """
         cursor.execute(query, (client_id,))
-        appointments = cursor.fetchall()
+        citas = cursor.fetchall()
         cursor.close()
         conn.close()
         return [
-        {
-            'idCita': row[0],
-            'Servicio': row[1],
-            'Producto': row[2],
-            'Estado': row[3],
-            'FechaCita': row[4],
-            'SesionInicio': row[5],
-            'SesionFin': row[6],
-            'Precio': row[7]
-        }
-        for row in appointments
-    ]
-        
+            {
+                'CitaID': row[0],
+                'Servicio': row[1],
+                'Producto': row[2],
+                'Fecha': row[3],
+                'HoraInicio': row[4],
+                'Responsable': row[5],
+                'Estado': row[6],
+                'Precio': row[7]
+            }
+            for row in citas
+        ]
+
     @staticmethod
     def get_citas_by_idEmpleado(IdEmpleado):
         conn = conectar()

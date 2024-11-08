@@ -24,6 +24,13 @@
 </head>
 <body>
 
+
+    <nav>
+
+        <br>
+        <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
+    
+    </nav>
     <h1>Citas Asignadas</h1>
 
     {% if citas %}
@@ -59,8 +66,6 @@
         <p>No tienes citas asignadas.</p>
     {% endif %}
 
-    <br>
-    <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-
+   <a href="">Actualizar estado de la cita</a>
 </body>
 </html>

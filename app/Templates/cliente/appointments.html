@@ -1,44 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Citas Pendientes</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
+    <a href="/client_home">Inicio</a>
+    <br>
+    <h1>Mis Citas</h1>
 
-    <h1>Citas Pendientes</h1>
-
-    {% if appointments %}
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID Cita</th>
-                <th>Servicio</th>
-                <th>Producto</th>
-                <th>Fecha</th>
-                <th>Hora de Inicio</th>
-                <th>Hora de Fin</th>
-                <th>Precio</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for appointment in appointments %}
-            <tr>
-                <td>{{ appointment.idCita }}</td>
-                <td>{{ appointment.Servicio }}</td>
-                <td>{{ appointment.Producto }}</td>
-                <td>{{ appointment.FechaCita }}</td>
-                <td>{{ appointment.SesionInicio }}</td>
-                <td>{{ appointment.SesionFin }}</td>
-                <td>{{ appointment.Precio }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% if citas %}
+        <table>
+            <thead>
+                <tr>
+                    <th>CitaID</th>
+                    <th>Servicio</th>
+                    <th>Producto</th>
+                    <th>Responsable</th>
+                    <th>Fecha</th>
+                    <th>HoraInicio</th>
+                    <th>Estado</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cita in citas %}
+                <tr>
+                    <td>{{ cita.CitaID }}</td>
+                    <td>{{ cita.Servicio }}</td>
+                    <td>{{ cita.Producto }}</td>
+                    <td>{{ cita.Responsable }}</td>
+                    <td>{{ cita.Fecha }}</td>
+                    <td>{{ cita.HoraInicio }}</td>
+                    <td>{{ cita.Estado }}</td>
+                    <td>{{ cita.Precio }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-    <p>No tienes citas pendientes.</p>
+        <p>No tienes citas asignadas.</p>
     {% endif %}
-
 </body>
 </html>
