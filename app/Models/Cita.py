@@ -66,100 +66,89 @@ class Cita:
     @staticmethod
     def get_appointments_by_client(client_id):
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         query = """
-                    SELECT 
-                c.idCita AS CitaID,
-                s.Nombre AS Servicio,
-                p.Nombre AS Producto,
-                c.FechaCita AS Fecha,
-                c.SesionInicio AS HoraInicio,
-                CONCAT(persona_emp.Nombre, ' ', persona_emp.Apellido) AS Responsable,
-                e.Descripcion AS Estado,
-                c.Precio AS Precio
-            FROM 
-                CITA c
-            JOIN 
-                CLIENTE cli ON c.idCliente = cli.idCliente
-            JOIN 
-                PRODUCTO p ON c.idProducto = p.idProducto
-            JOIN 
-                EMPLEADO emp ON c.idEmpleado = emp.idEmpleado
-            JOIN 
-                PERSONA persona_emp ON emp.idPersona = persona_emp.idPersona
-            JOIN 
-                ESTADO e ON c.idEstado = e.idEstado
-            JOIN 
-                SERVICIO s ON c.idServicio = s.idServicio
-            WHERE 
-                cli.idCliente = %s
-
+        SELECT 
+            c.idCita AS CitaID,
+            s.Nombre AS Servicio,
+            p.Nombre AS Producto,
+            c.FechaCita AS Fecha,
+            c.SesionInicio AS HoraInicio,
+            CONCAT(persona_emp.Nombre, ' ', persona_emp.Apellido) AS Responsable,
+            e.Descripcion AS Estado,
+            c.Precio AS Precio
+        FROM 
+            CITA c
+        JOIN 
+            CLIENTE cli ON c.idCliente = cli.idCliente
+        JOIN 
+            PRODUCTO p ON c.idProducto = p.idProducto
+        JOIN 
+            EMPLEADO emp ON c.idEmpleado = emp.idEmpleado
+        JOIN 
+            PERSONA persona_emp ON emp.idPersona = persona_emp.idPersona
+        JOIN 
+            ESTADO e ON c.idEstado = e.idEstado
+        JOIN 
+            SERVICIO s ON c.idServicio = s.idServicio
+        WHERE 
+            cli.idCliente = %s
         """
         cursor.execute(query, (client_id,))
         citas = cursor.fetchall()
         cursor.close()
         conn.close()
-        return [
-            {
-                'CitaID': row[0],
-                'Servicio': row[1],
-                'Producto': row[2],
-                'Fecha': row[3],
-                'HoraInicio': row[4],
-                'Responsable': row[5],
-                'Estado': row[6],
-                'Precio': row[7]
-            }
-            for row in citas
-        ]
+        return citas  # Esta lista tendrá diccionarios
 
     @staticmethod
     def get_citas_by_idEmpleado(IdEmpleado):
         conn = conectar()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         query = """
-            SELECT 
-                CONCAT(cli_persona.Nombre, ' ', cli_persona.Apellido) AS NombreCliente,
-                s.Nombre AS Servicio,
-                p.Nombre AS Producto,
-                CONCAT(emp_persona.Nombre, ' ', emp_persona.Apellido) AS EmpleadoResponsable,
-                c.FechaCita,
-                c.SesionInicio,
-                c.SesionFin,
-                c.Precio
-            FROM 
-                CITA c
-            JOIN 
-                CLIENTE cli ON c.idCliente = cli.idCliente
-            JOIN 
-                PERSONA cli_persona ON cli.idPersona = cli_persona.idPersona
-            JOIN 
-                SERVICIO s ON c.idServicio = s.idServicio
-            JOIN 
-                PRODUCTO p ON c.idProducto = p.idProducto
-            JOIN 
-                EMPLEADO e ON c.idEmpleado = e.idEmpleado
-            JOIN 
-                PERSONA emp_persona ON e.idPersona = emp_persona.idPersona
-            JOIN 
-                ESTADO est ON c.idEstado = est.idEstado
-            WHERE 
-                est.Descripcion = 'Pendiente' AND e.idEmpleado = %s
+        SELECT 
+            c.idCita AS CitaID,  -- Asegura que este campo esté disponible
+            CONCAT(cli_persona.Nombre, ' ', cli_persona.Apellido) AS NombreCliente,
+            s.Nombre AS Servicio,
+            p.Nombre AS Producto,
+            CONCAT(emp_persona.Nombre, ' ', emp_persona.Apellido) AS EmpleadoResponsable,
+            c.FechaCita,
+            c.SesionInicio,
+            c.SesionFin,
+            c.Precio
+        FROM 
+            CITA c
+        JOIN 
+            CLIENTE cli ON c.idCliente = cli.idCliente
+        JOIN 
+            PERSONA cli_persona ON cli.idPersona = cli_persona.idPersona
+        JOIN 
+            SERVICIO s ON c.idServicio = s.idServicio
+        JOIN 
+            PRODUCTO p ON c.idProducto = p.idProducto
+        JOIN 
+            EMPLEADO e ON c.idEmpleado = e.idEmpleado
+        JOIN 
+            PERSONA emp_persona ON e.idPersona = emp_persona.idPersona
+        JOIN 
+            ESTADO est ON c.idEstado = est.idEstado
+        WHERE 
+            est.Descripcion = 'Pendiente' AND e.idEmpleado = %s
         """
-        cursor.execute(query, (IdEmpleado,)) 
+        cursor.execute(query, (IdEmpleado,))
         citas = cursor.fetchall()
         cursor.close()
         conn.close()
-        return [
-            {
-                'NombreCliente': row[0],
-                'Servicio': row[1],
-                'Producto': row[2],
-                'EmpleadoResponsable': row[3],
-                'FechaCita': row[4],
-                'SesionInicio': row[5],
-                'SesionFin': row[6],
-                'Precio': row[7]
-            }
-            for row in citas
-        ]
+        return citas
+
+    @staticmethod
+    def actualizar_estado(cita_id, nuevo_estado_id):
+        """
+        Actualiza el estado de una cita dada su ID.
+        """
+        conn = conectar()
+        cursor = conn.cursor()
+        query = "UPDATE CITA SET idEstado = %s WHERE idCita = %s"
+        cursor.execute(query, (nuevo_estado_id, cita_id))
+        conn.commit()
+        cursor.close()
+        conn.close()

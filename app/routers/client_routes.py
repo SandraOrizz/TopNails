@@ -19,6 +19,7 @@ def schedule_appointment():
         
     
         result = ClientController.schedule_appointment(service_id, product_id, date, time)
+        print("Resultados")
         print(result)
         if result == "Cita programada exitosamente.":
           return redirect(url_for('auth.client_home'))
