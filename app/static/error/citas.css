@@ -1,0 +1,99 @@
+:root {
+    --primary-color: #f8c291;
+    --secondary-color: #6a1b9a;
+    --text-color: #333;
+    --background-color: #fff5e6;
+    --card-bg-color: #ffffff;
+    --input-bg-color: #f9f9f9;
+    --input-border-color: #ddd;
+    --input-focus-color: #8e24aa;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+
+header {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.logo-img {
+    width: 160px;
+    height: auto;
+    margin-left: 30%;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+.btn-logout {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem 0.5rem;
+    border: 2px solid var(--secondary-color);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.back-button {
+    color: var(--secondary-color);
+    align-items: center;
+    position: absolute;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.back-button i {
+    width: 24px;
+    height: 24px;
+} 
+
+
+.appointments {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+footer {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

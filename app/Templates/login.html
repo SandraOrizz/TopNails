@@ -6,7 +6,7 @@
     <title>TOP Nails - Iniciar Sesión</title>
     <link rel="stylesheet" href="../static/Style/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -16,6 +16,15 @@
             </div>
             <h2>Iniciar Sesión</h2>
             <form method="post" action="/login">
+                <div class="input-group role-select">
+                    <i class="fas fa-user-tag"></i>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Selecciona tu rol</option>
+                        <option value="1">Administrador</option>
+                        <option value="2">Cliente</option>
+                        <option value="3">Empleado</option>
+                    </select>
+                </div>
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" id="username" name="username" placeholder="Nombre de Usuario" required>
@@ -24,21 +33,11 @@
                     <i class="fas fa-lock"></i>
                     <input type="password" id="password" name="password" placeholder="Contraseña" required>
                 </div>
-                <div class="input-group">
-                    <select id="role" name="role" required>
-                        <option value="" disabled selected>Selecciona tu rol</option>
-                        <option value="1">Administrador</option>
-                        <option value="2">Cliente</option>
-                        <option value="3">Empleado</option>
-                    </select>
-                </div>
+               
                 <button type="submit">Iniciar Sesión</button>
             </form>
-            <div class="extra-options">
-                <a href="/register" class="register">¿No tienes cuenta? Regístrate aquí</a>
-            </div>
+            
         </div>
     </div>
-    <script src="/static/script.js"></script>
 </body>
 </html>

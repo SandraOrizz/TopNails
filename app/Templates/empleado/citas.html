@@ -1,90 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citas del Empleado</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .form-group {
-            margin-top: 10px;
-        }
-    </style>
+    <title>Citas del Empleado - TOP Nails</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../static/Style/citaempleado.css">
 </head>
 <body>
-
-    <nav>
-        <br>
-        <a href="{{ url_for('auth.logout') }}">Cerrar sesión</a>
-        <br>
-        <a href="/employee_home">Inicio</a>
-    </nav>
-
-    <h1>Citas Asignadas</h1>
-
-    {% if citas %}
-        <form action="{{ url_for('empleado.actualizar_estado') }}" method="POST">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Servicio</th>
-                        <th>Producto</th>
-                        <th>Empleado Responsable</th>
-                        <th>Fecha de Cita</th>
-                        <th>Hora de Inicio</th>
-                        <th>Hora de Fin</th>
-                        <th>Precio</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cita in citas %}
-                    <tr>
-                        
-                        <td>{{ cita.NombreCliente }}</td>
-                        <td>{{ cita.Servicio }}</td>
-                        <td>{{ cita.Producto }}</td>
-                        <td>{{ cita.EmpleadoResponsable }}</td>
-                        <td>{{ cita.FechaCita }}</td>
-                        <td>{{ cita.SesionInicio }}</td>
-                        <td>{{ cita.SesionFin }}</td>
-                        <td>{{ cita.Precio }}</td>
-                        <td>
-                            <select name="estado_{{ cita.CitaID }}">
-                                {% for estado in estados %}
-                                    <option value="{{ estado.idEstado }}" 
-                                            {% if cita.Estado == estado.Descripcion %} selected {% endif %}>
-                                        {{ estado.Descripcion }}
-                                    </option>
+    <header>
+        <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+        </div>
+        
+        <a href="/employee_home" class="back-button" aria-label="Volver al inicio">
+            <i data-lucide="arrow-left"></i>
+        </a>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="button-text">Cerrar sesión</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>   
+        </header>
+    <main>
+        <section class="appointments">
+            <h2>Citas Asignadas</h2>
+            {% if citas %}
+                <form action="{{ url_for('empleado.actualizar_estado') }}" method="POST">
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Servicio</th>
+                                    <th>Producto</th>
+                                    <th>Empleado Responsable</th>
+                                    <th>Fecha de Cita</th>
+                                    <th>Hora de Inicio</th>
+                                    <th>Hora de Fin</th>
+                                    <th>Precio</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cita in citas %}
+                                <tr>
+                                    <td>{{ cita.NombreCliente }}</td>
+                                    <td>{{ cita.Servicio }}</td>
+                                    <td>{{ cita.Producto }}</td>
+                                    <td>{{ cita.EmpleadoResponsable }}</td>
+                                    <td>{{ cita.FechaCita }}</td>
+                                    <td>{{ cita.SesionInicio }}</td>
+                                    <td>{{ cita.SesionFin }}</td>
+                                    <td>{{ cita.Precio }}</td>
+                                    <td>
+                                        <select name="estado_{{ cita.CitaID }}" class="status-select">
+                                            {% for estado in estados %}
+                                                <option value="{{ estado.idEstado }}" 
+                                                        {% if cita.Estado == estado.Descripcion %} selected {% endif %}>
+                                                    {{ estado.Descripcion }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                            </select>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="form-group">
-                <button type="submit">Actualizar Estado</button>
-            </div>
-        </form>
-    {% else %}
-        <p>No tienes citas asignadas.</p>
-    {% endif %}
-
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn-primary">Actualizar Estado</button>
+                    </div>
+                </form>
+            {% else %}
+                <p class="no-appointments">No tienes citas asignadas.</p>
+            {% endif %}
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 TOP Nails. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        lucide.createIcons();
+        loadReservations();
+    </script>
 </body>
 </html>

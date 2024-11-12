@@ -1,37 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Cita</title>
+    <title>Agendar Cita - Top Nails</title>
+    <link rel="stylesheet" href="../../static/Style/agendar.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 </head>
 <body>
-    <h1>Agendar Cita</h1>
+    <header>
+       
+        <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+        </div>
+        
+        <a href="/client_home" class="back-button" aria-label="Volver al inicio">
+            <i data-lucide="arrow-left"></i>
+        </a>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="button-text">Cerrar sesión</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>   
+    </header>
 
-    <form action="{{ url_for('client.schedule_appointment') }}" method="POST">
-        <label for="service_id">Selecciona un Servicio:</label>
-        <select name="service_id" id="service_id" required>
-            {% for service in services %}
-                <option value="{{ service.idServicio }}">{{ service.Nombre }}</option>
-            {% endfor %}
-        </select>
+    <main>
+        <form action="{{ url_for('client.schedule_appointment') }}" method="POST" class="appointment-form">
+            <div class="form-group">
+                <label for="service_id">Selecciona un Servicio:</label>
+                <select name="service_id" id="service_id" required>
+                    {% for service in services %}
+                        <option value="{{ service.idServicio }}">{{ service.Nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <label for="product_id">Selecciona un Producto:</label>
-        <select name="product_id" id="product_id" required>
-            {% for product in products %}
-                <option value="{{ product.idProducto }}">{{ product.Nombre }}</option>
-            {% endfor %}
-        </select>
+            <div class="form-group">
+                <label for="product_id">Selecciona un Producto:</label>
+                <select name="product_id" id="product_id" required>
+                    {% for product in products %}
+                        <option value="{{ product.idProducto }}">{{ product.Nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <label for="date">Fecha:</label>
-        <input type="date" name="date" id="date" required>
+            <div class="form-group">
+                <label for="date">Fecha:</label>
+                <input type="date" name="date" id="date" required>
+            </div>
 
-        <label for="time">Hora:</label>
-        <input type="time" name="time" id="time" required>
+            <div class="form-group">
+                <label for="time">Hora:</label>
+                <input type="time" name="time" id="time" required>
+            </div>
 
-        <button type="submit">Agendar Cita</button>
-    </form>
+            <button type="submit" class="submit-button">Agendar Cita</button>
+        </form>
 
-    <a href="{{ url_for('client.view_appointments') }}">Ver Mis Citas</a>
+        <div class="view-appointments">
+            <a href="{{ url_for('client.view_appointments') }}" class="view-appointments-button">Ver Mis Citas</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Top Nails. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        lucide.createIcons();
+        loadReservations();
+    </script>
 </body>
 </html>

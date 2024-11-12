@@ -3,58 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citas Pendientes</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <title>Mis Citas - Top Nails</title>
+    <link rel="stylesheet" href="../../static/Style/citas.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 </head>
 <body>
-    <a href="/client_home">Inicio</a>
-    <br>
-    <h1>Mis Citas</h1>
+    <header>
+         <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+        </div>
+        
+        <a href="/client_home" class="back-button" aria-label="Volver al inicio">
+            <i data-lucide="arrow-left"></i>
+        </a>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="button-text">Cerrar sesión</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>   
+    </header>
 
-    {% if citas %}
-        <table>
-            <thead>
-                <tr>
-                    <th>CitaID</th>
-                    <th>Servicio</th>
-                    <th>Producto</th>
-                    <th>Responsable</th>
-                    <th>Fecha</th>
-                    <th>HoraInicio</th>
-                    <th>Estado</th>
-                    <th>Precio</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cita in citas %}
-                <tr>
-                    <td>{{ cita.CitaID }}</td>
-                    <td>{{ cita.Servicio }}</td>
-                    <td>{{ cita.Producto }}</td>
-                    <td>{{ cita.Responsable }}</td>
-                    <td>{{ cita.Fecha }}</td>
-                    <td>{{ cita.HoraInicio }}</td>
-                    <td>{{ cita.Estado }}</td>
-                    <td>{{ cita.Precio }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No tienes citas asignadas.</p>
-    {% endif %}
+    <main>
+        <section class="appointments">
+            <h2>Citas Asignadas</h2>
+        {% if citas %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CitaID</th>
+                            <th>Servicio</th>
+                            <th>Producto</th>
+                            <th>Responsable</th>
+                            <th>Fecha</th>
+                            <th>HoraInicio</th>
+                            <th>Estado</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in citas %}
+                        <tr>
+                            <td data-label="CitaID">{{ cita.CitaID }}</td>
+                            <td data-label="Servicio">{{ cita.Servicio }}</td>
+                            <td data-label="Producto">{{ cita.Producto }}</td>
+                            <td data-label="Responsable">{{ cita.Responsable }}</td>
+                            <td data-label="Fecha">{{ cita.Fecha }}</td>
+                            <td data-label="HoraInicio">{{ cita.HoraInicio }}</td>
+                            <td data-label="Estado">{{ cita.Estado }}</td>
+                            <td data-label="Precio">{{ cita.Precio }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="no-citas">No tienes citas asignadas.</p>
+        {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Top Nails. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        lucide.createIcons();
+        loadReservations();
+    </script>
 </body>
 </html>

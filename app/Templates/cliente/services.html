@@ -1,23 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios Disponibles</title>
+    <title>Servicios Disponibles - Top Nails</title>
+    <link rel="stylesheet" href="../../static/Style/servicios.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <h1>Servicios Disponibles</h1>
+    <header>
+        <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+        </div>
+        
+        <a href="/client_home" class="back-button" aria-label="Volver al inicio">
+            <i data-lucide="arrow-left"></i>
+        </a>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="button-text">Cerrar sesión</span>
+                    </a>
+                </li>
+            </ul>
+            </nav>
+    </header>
 
-    <ul>
-        {% for service in services %}
-            <li>
-                <strong>{{ service.Nombre }}</strong>: {{ service.Descripcion }} - Precio: ${{ service.Precio }}
-            </li>
-        {% else %}
-            <li>No hay servicios disponibles en este momento.</li>
-        {% endfor %}
-    </ul>
+    <main>
+        <ul class="services-list">
+            {% for service in services %}
+                <li class="service-item">
+                    <h2 class="service-name">{{ service.Nombre }}</h2>
+                    <p class="service-description">{{ service.Descripcion }}</p>
+                    <p class="service-price">Precio: ₲ {{ service.Precio }}</p>
+                </li>
+            {% else %}
+                <li class="no-services">No hay servicios disponibles en este momento.</li>
+            {% endfor %}
+        </ul>
 
-    <a href="{{ url_for('client.schedule_appointment') }}">Agendar Cita</a>
+        <a href="{{ url_for('client.schedule_appointment') }}" class="schedule-button">Agendar Cita</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Top Nails. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        lucide.createIcons();
+        loadReservations();
+    </script>
 </body>
 </html>

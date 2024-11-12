@@ -1,24 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Panel de Administración - TOP Nails</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/Style/admin.css">
 </head>
 <body>
-    <h1>Admin Dashboard</h1>
-    <p>Seleccione una opción para comenzar:</p>
+    <div class="page-container">
+    <header>
+        <div class="logo">
+            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+           
+        </div>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span class="button-text">Cerrar sesión</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="dashboard">
+            <h2>Bienvenido al Panel de Administración</h2>
+            <p>Seleccione una opción para comenzar:</p>
+            <div class="dashboard-options">
+                <a href="{{ url_for('admin.create_user') }}" class="dashboard-option">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Agregar Usuario</span>
+                </a>
+                <a href="{{ url_for('admin.create_servicio') }}" class="dashboard-option">
+                    <i class="fas fa-concierge-bell"></i>
+                    <span>Agregar Servicio</span>
+                </a>
+                <a href="{{ url_for('admin.create_producto') }}" class="dashboard-option">
+                    <i class="fas fa-pump-soap"></i>
+                    <span>Agregar Producto</span>
+                </a>
+                <a href="{{ url_for('auth.change_password') }}" class="dashboard-option">
+                    <i class="fas fa-key"></i>
+                    <span>Cambiar Clave</span>
+                </a>
+            </div>
+        </section>
+    </main>
 
-    <!-- Botón para agregar un nuevo usuario -->
-    <a href="{{ url_for('admin.create_user') }}">Agregar Usuario</a>
-    <br>
-    <a href="{{ url_for('admin.create_servicio') }}">Agregar Servicio</a>
-    <br>
-    <a href="{{ url_for('admin.create_producto') }}">Agregar Producto</a>
-    <br>
-    <a href="{{ url_for('auth.logout') }}">Cerrar sesion</a>
-    <br>
-    <a href="{{ url_for('auth.change_password') }}">Cambiar clave</a>
-    <br>
+    <footer>
+        <p>&copy; 2023 TOP Nails. Todos los derechos reservados.</p>
+    </footer>
+</div>
 </body>
 </html>

@@ -5,8 +5,8 @@ def Conectar():
         conexion = mysql.connector.connect(
         host="localhost",          
         user="root",         
-        password="M4tsum0t017*",   
-        database="TopNails" 
+        password="",   
+        database="topnails" 
     )
     except Exception as e:
         print("Ocurrió un error:", e)
