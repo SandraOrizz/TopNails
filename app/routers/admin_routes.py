@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from app.controllers.admin_controller import AdminController
-
+from app.Models.Producto import Producto
 bp = Blueprint('admin', __name__)
 
 @bp.route('/admin/create_user', methods=['GET', 'POST'])
@@ -54,13 +54,16 @@ def create_servicio():
     if request.method == 'POST':
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
-        precio = request.form['precio']
-        
-        if AdminController.insert_servicio(nombre, descripcion, precio):
-           
+        costo = request.form['precio']  # Cambia 'precio' a 'costo' para coincidir con insert_servicio
+
+        # Obtener los productos seleccionados
+        productos_seleccionados = request.form.getlist('productos')  # 'productos' es el nombre del campo de los productos seleccionados
+
+        if AdminController.insert_servicio(nombre, descripcion, costo, productos_seleccionados):
             return redirect(url_for('auth.admin_home'))
         else:
-          
             return redirect(url_for('admin.create_servicio'))
     
-    return render_template('admin/create_servicio.html')
+    # Obtener todos los productos disponibles para mostrarlos en el formulario
+    productos = Producto.get_all_products()  # Este método debe devolver todos los productos
+    return render_template('admin/create_servicio.html', productos=productos)

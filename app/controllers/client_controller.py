@@ -1,51 +1,104 @@
-from datetime import datetime
-from app.Models.Cliente import Cliente
 from app.Models.Servicio import Servicio
 from app.Models.Producto import Producto
 from app.Models.Cita import Cita
-from flask import session
-
+from datetime import datetime
+from app.db import conectar
 class ClientController:
+
     @staticmethod
     def get_services():
+        """Obtiene todos los servicios disponibles."""
         return Servicio.get_all_services()
 
     @staticmethod
     def get_products():
+        """Obtiene todos los productos disponibles."""
         return Producto.get_all_products()
 
     @staticmethod
-    def schedule_appointment(service_id, product_id, date, time):
-        user_id = session.get('user_id')
-        client_id = Cliente.get_cliente_id_by_user_id(user_id)
-        print("Cliente id")
-        print(client_id)
-        if client_id is None:
-            return "Error: Cliente no encontrado."
-
-        # Obtiene el estado inicial de la cita (por ejemplo, "pendiente")
-        initial_state = 1  # Suponiendo que 1 es el id del estado "pendiente"
-
-        # Obtener precios del servicio y del producto
-        service_price = Servicio.get_service_price(service_id)
-        product_price = Producto.get_product_price(product_id)
-
-        # Calcular el precio total
-        total_price = service_price + product_price
-        print(total_price)
-
-        # Convertir `date` y `time` a objetos datetime
-        try:
-            date_obj = datetime.strptime(date, "%Y-%m-%d").date()  # Convierte la fecha a `datetime.date`
-            time_obj = datetime.strptime(time, "%H:%M").time()     # Convierte la hora a `datetime.time`
-            datetime_obj = datetime.combine(date_obj, time_obj)    # Combina para crear `datetime`
-
-            # Crear la cita
-            Cita.create_appointment(client_id, service_id, product_id, initial_state, datetime_obj, total_price)
-            return "Cita programada exitosamente."
-        except Exception as e:
-            return f"Error al programar la cita: {e}"
+    def get_products_by_service(service_id):
+        """Obtiene los productos relacionados a un servicio específico."""
+        return Producto.get_products_by_service(service_id)
 
     @staticmethod
-    def get_client_appointments(client_id):
-        return Cita.get_appointments_by_client(client_id)
+    def schedule_appointment(service_id, product_id, date, time, client_id):
+        print("Empezando validacion")
+        print(service_id)
+        print(product_id)
+        try:
+            # Validar fecha y hora
+            appointment_datetime = datetime.strptime(f"{date} {time}", '%Y-%m-%d %H:%M')
+            if appointment_datetime < datetime.now():
+                print("hora invalida")
+                return "La fecha y hora deben ser en el futuro."
+
+            print("hora valida")
+          
+            price=Producto.get_product_price(product_id)+Servicio.get_service_price(service_id) 
+            state_id=1
+
+            print("validado")
+            
+            # Llamada a la función create_appointment con el orden correcto de los parámetros
+            result = Cita.create_appointment(client_id, service_id, product_id, state_id, appointment_datetime, price)
+            
+            print(result)
+            if result==True:
+                print("Cita programada")
+                return "Cita programada exitosamente."
+            else:
+                return "No se pudo agendar la cita."
+        except Exception as e:
+            return f"Error al agendar la cita: {str(e)}"
+
+
+    @staticmethod
+    def get_client_appointments(cliente_id):
+        """Obtiene todas las citas del cliente."""
+        return Cita.get_appointments_by_cliente(cliente_id)
+    @staticmethod
+    def get_client_appointments(cliente_id):
+        """
+        Recupera las citas de un cliente.
+        """
+        try:
+            # Aquí asumimos que usas algún ORM o consultas SQL directas.
+            conn = conectar()  # Método para conectar a la base de datos
+            cursor = conn.cursor()
+            query = """
+            SELECT 
+                C.Idcita, 
+                C.FechaCita, 
+                C.SesionInicio, 
+                C.SesionFin, 
+                C.Precio, 
+                P.Nombre AS EmpleadoNombre, 
+                P.Apellido AS EmpleadoApellido, 
+                S.Descripcion AS ServicioDescripcion, 
+                PR.Nombre AS ProductoNombre, 
+                ES.Descripcion AS EstadoCita
+            FROM 
+                CITA C
+            JOIN 
+                SERVICIO S ON C.idServicio = S.idServicio
+            JOIN 
+                PRODUCTO PR ON C.idProducto = PR.idProducto
+            JOIN 
+                ESTADO ES ON C.idEstado = ES.idEstado
+            JOIN 
+                EMPLEADO E ON C.idEmpleado = E.idEmpleado
+            JOIN 
+                PERSONA P ON E.idPersona = P.idPersona
+            WHERE 
+                C.idCliente = %s
+            """
+            cursor.execute(query, (cliente_id,))
+            citas = cursor.fetchall()
+            cursor.close()
+            conn.close()
+
+            # Retorna las citas obtenidas.
+            return citas
+        except Exception as e:
+            print(f"Error al obtener citas: {str(e)}")
+            return []

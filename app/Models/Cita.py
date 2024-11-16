@@ -11,13 +11,15 @@ class Cita:
         employee_id = Cita.find_available_employee(datetime_obj, end_time)
         if not employee_id:
             raise Exception("No hay empleados disponibles en ese horario.")
-
+        
         conn = conectar()
         cursor = conn.cursor()
         query = """
         INSERT INTO CITA (idCliente, idServicio, idEstado, idProducto, idEmpleado, FechaCita, SesionInicio, SesionFin, Precio)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
+        
+        print("Cita creada pre")
         cursor.execute(query, (
             client_id, service_id, state_id, product_id, employee_id, 
             datetime_obj.date(), datetime_obj.time(), end_time.time(), price
@@ -25,20 +27,26 @@ class Cita:
         conn.commit()
         cursor.close()
         conn.close()
+        return True
 
     @staticmethod
     def find_available_employee(start_time, end_time):
+        
+        print("Inicio")
+        print(start_time)
+        print("fin")
+        print(end_time)
         conn = conectar()
         cursor = conn.cursor()
         query = """
         SELECT idEmpleado FROM EMPLEADO
         WHERE idEmpleado NOT IN (
             SELECT idEmpleado FROM CITA
-            WHERE (SesionInicio < %s AND SesionFin > %s)
+            WHERE (SesionInicio < %s AND SesionFin > %s) OR (SesionInicio < %s AND SesionFin > %s)
         )
         LIMIT 1
         """
-        cursor.execute(query, (end_time, start_time))
+        cursor.execute(query, (start_time, end_time, end_time, start_time))
         result = cursor.fetchone()
         cursor.close()
         conn.close()
@@ -57,12 +65,12 @@ class Cita:
             (SesionInicio >= %s AND SesionFin <= %s)
         )
         """
-        cursor.execute(query, (employee_id, end_time, start_time, start_time, start_time, start_time, end_time))
+        cursor.execute(query, (employee_id, start_time, end_time, start_time, start_time, start_time, end_time))
         result = cursor.fetchone()
         cursor.close()
         conn.close()
         return result[0] == 0
-    
+
     @staticmethod
     def get_appointments_by_client(client_id):
         conn = conectar()
@@ -106,7 +114,7 @@ class Cita:
         cursor = conn.cursor(dictionary=True)
         query = """
         SELECT 
-            c.idCita AS CitaID,  -- Asegura que este campo esté disponible
+            c.idCita AS CitaID,  
             CONCAT(cli_persona.Nombre, ' ', cli_persona.Apellido) AS NombreCliente,
             s.Nombre AS Servicio,
             p.Nombre AS Producto,

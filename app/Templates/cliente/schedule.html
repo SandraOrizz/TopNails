@@ -8,13 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 </head>
 <body>
     <header>
-       
         <div class="logo">
-            <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
+            <img src="../../static/img/top_nails.png" alt="TOP Nails Logo" class="logo-img">
         </div>
         
         <a href="/client_home" class="back-button" aria-label="Volver al inicio">
@@ -37,6 +35,7 @@
             <div class="form-group">
                 <label for="service_id">Selecciona un Servicio:</label>
                 <select name="service_id" id="service_id" required>
+                    <option value="">Seleccione un servicio</option>
                     {% for service in services %}
                         <option value="{{ service.idServicio }}">{{ service.Nombre }}</option>
                     {% endfor %}
@@ -46,9 +45,8 @@
             <div class="form-group">
                 <label for="product_id">Selecciona un Producto:</label>
                 <select name="product_id" id="product_id" required>
-                    {% for product in products %}
-                        <option value="{{ product.idProducto }}">{{ product.Nombre }}</option>
-                    {% endfor %}
+                    <option value="">Seleccione un producto</option>
+                    <!-- Los productos se cargarán dinámicamente -->
                 </select>
             </div>
 
@@ -65,17 +63,48 @@
             <button type="submit" class="submit-button">Agendar Cita</button>
         </form>
 
-        <div class="view-appointments">
-            <a href="{{ url_for('client.view_appointments') }}" class="view-appointments-button">Ver Mis Citas</a>
-        </div>
+      
     </main>
 
     <footer>
         <p>&copy; 2023 Top Nails. Todos los derechos reservados.</p>
     </footer>
+
     <script>
+        // Cargar íconos de Lucide
         lucide.createIcons();
-        loadReservations();
+    
+        // Actualizar productos según el servicio seleccionado
+        document.getElementById('service_id').addEventListener('change', function () {
+            const serviceId = this.value;
+            const productSelect = document.getElementById('product_id');
+            productSelect.innerHTML = '<option value="">Cargando productos...</option>';
+    
+            // Depuración: Mostrar el ID del servicio seleccionado
+            console.log(`Servicio seleccionado: ${serviceId}`);
+    
+            if (serviceId) {
+                fetch(`/client/get_products/${serviceId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        productSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+                        console.log('Productos recibidos:', data); // Depuración: Mostrar los productos recibidos
+                        data.forEach(product => {
+                            const option = document.createElement('option');
+                            option.value = product.idProducto;
+                            option.textContent = product.Nombre;
+                            productSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        productSelect.innerHTML = '<option value="">Error al cargar productos</option>';
+                        console.error('Error al obtener productos:', error);
+                    });
+            } else {
+                productSelect.innerHTML = '<option value="">Seleccione un producto</option>';
+            }
+        });
     </script>
+    
 </body>
 </html>

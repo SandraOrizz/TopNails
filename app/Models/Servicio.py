@@ -39,3 +39,13 @@ class Servicio:
         conn.close()
         
         return precio[0] if precio else None  # Retorna el precio o None si no existe
+    @staticmethod
+    def add_product_to_service(servicio_id, producto_id):
+        conn = conectar()
+        cursor = conn.cursor()
+        query = "INSERT INTO ServicioProducto (idServicio, idProducto) VALUES (%s, %s)"
+        cursor.execute(query, (servicio_id, producto_id))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True

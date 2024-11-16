@@ -15,7 +15,6 @@
             <div class="logo">
                 <img src="../static/img/top nails.png" alt="TOP Nails Logo" class="logo-img">
             </div>
-            
             <a href="/admin_home" class="back-button" aria-label="Volver al inicio">
                 <i data-lucide="arrow-left"></i>
             </a>
@@ -51,6 +50,17 @@
                             <input type="number" id="precio" name="precio" step="0.01" min="0" required>
                         </div>
                     </div>
+
+                    <!-- Nueva Sección para Seleccionar Productos -->
+                    <div class="form-group">
+                        <label>Productos Asociados:</label>
+                        {% for producto in productos %}
+                            <div>
+                                <input type="checkbox" id="producto_{{ producto.idProducto }}" name="productos" value="{{ producto.idProducto }}">
+                                <label for="producto_{{ producto.idProducto }}">{{ producto.Nombre }} - ₲{{ producto.Precio }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
                     
                     <button type="submit" class="btn-submit">Crear Servicio</button>
                 </form>
@@ -62,7 +72,6 @@
     </div>
     <script>
         lucide.createIcons();
-        loadReservations();
     </script>
 </body>
 </html>

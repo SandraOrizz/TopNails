@@ -1,8 +1,8 @@
 from flask import session, request, flash, redirect, url_for
 from app.Models.Persona import Persona
 from app.Models.Usuario import Usuario
-from app.Models.Cliente import Cliente  # Asegúrate de importar el modelo Cliente
-from app.Models.Empleado import Empleado  # Importa el modelo Empleado
+from app.Models.Cliente import Cliente
+from app.Models.Empleado import Empleado
 from app.Models.Servicio import Servicio
 from app.Models.Producto import Producto
 import hashlib
@@ -26,20 +26,19 @@ class AdminController:
             # Crear nueva persona en la base de datos
             persona_id = Persona.create_persona(first_name, last_name, birthdate, tipo_personal)
             if not persona_id:
-                print("Error al crear persona", "error")
+                flash("Error al crear persona", "error")
                 return False
 
             # Si el rol es Cliente, crear un registro en la tabla CLIENTE
             if role_id == '2':  # ID del rol de Cliente
-                if not Cliente.create_cliente(persona_id):  # Llama al método para crear cliente
-                    print("Error al crear cliente", "error")
+                if not Cliente.create_cliente(persona_id):
+                    flash("Error al crear cliente", "error")
                     return False
 
             # Si el rol es Empleado, crear un registro en la tabla EMPLEADO
             if role_id == '3':  # ID del rol de Empleado
-                # Aquí puedes manejar la creación de un empleado
-                if not Empleado.create_employee(persona_id):  # Crea el empleado
-                    print("Error al crear empleado", "error")
+                if not Empleado.create_employee(persona_id):
+                    flash("Error al crear empleado", "error")
                     return False
 
             # Crear el nombre de usuario: primera letra del nombre + apellido
@@ -48,9 +47,9 @@ class AdminController:
             # Crear usuario asignado a esa persona
             hashed_password = hashlib.sha256(user_data['password'].encode()).hexdigest()
             user_data['password'] = hashed_password
-            user_data['username'] = username  # Asignar el nombre de usuario
-            user_data['idPersona'] = persona_id  # Asignar la relación con Persona
-            user_data['role'] = role_id  # Asignar rol
+            user_data['username'] = username
+            user_data['idPersona'] = persona_id
+            user_data['role'] = role_id
 
             # Insertar usuario en la base de datos
             user_id = Usuario.create_user(user_data)
@@ -64,17 +63,47 @@ class AdminController:
                 return False
 
             return True
-            
+
         except Exception as e:
             # Manejo de errores, mostrando el mensaje de error en el log
             print(f"Error en insert_user_person: {str(e)}")
             flash("Ocurrió un error inesperado, por favor inténtelo de nuevo.", "error")
             return False
-        
+
     @staticmethod  
     def insert_producto(nombre, descripcion, precio):
-        return Producto.create_producto(nombre, descripcion, precio)
+        try:
+            # Llama al método create_producto para insertar el producto en la base de datos
+            if Producto.create_producto(nombre, descripcion, precio):
+                flash("Producto creado con éxito", "success")
+                return True
+            else:
+                flash("Error al crear producto", "error")
+                return False
+        except Exception as e:
+            print(f"Error en insert_producto: {str(e)}")
+            flash("Ocurrió un error al intentar crear el producto.", "error")
+            return False
 
     @staticmethod
-    def insert_servicio(nombre, descripcion, costo):
-        return Servicio.create_servicio(nombre, descripcion, costo)
+    def insert_servicio(nombre, descripcion, costo, productos_seleccionados):
+        try:
+            # Crear el servicio
+            servicio_id = Servicio.create_servicio(nombre, descripcion, costo)
+            if not servicio_id:
+                flash("Error al crear servicio", "error")
+                return False
+
+            # Asociar productos con el servicio
+            for producto_id in productos_seleccionados:
+                if not Servicio.add_product_to_service(servicio_id, producto_id):
+                    flash("Error al asociar producto con el servicio", "error")
+                    return False
+
+            flash("Servicio creado con éxito", "success")
+            return True
+
+        except Exception as e:
+            print(f"Error en insert_servicio: {str(e)}")
+            flash("Ocurrió un error al intentar crear el servicio.", "error")
+            return False
