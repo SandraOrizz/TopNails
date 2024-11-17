@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servicios Disponibles - Top Nails</title>
+    <title>Productos Disponibles - Top Nails</title>
     <link rel="stylesheet" href="../../static/Style/servicios.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
@@ -31,22 +31,22 @@
     </header>
 
     <main>
-        <ul class="services-list">
-            {% for service in services %}
-                <li class="service-item">
-                    <h2 class="service-name">{{ service.Nombre }}</h2>
-                    <p class="service-description">{{ service.Descripcion }}</p>
-                    <p class="service-price">Precio: ₲ {{ service.Precio }}</p>
+        <ul class="products-list">
+            {% for product in products %}
+                <li class="product-item">
+                    <h2 class="product-name">{{ product.Nombre }}</h2>
+                    <p class="product-description">{{ product.Descripcion }}</p>
+                    <p class="product-price">Precio: ₲ {{ product.Precio }}</p>
                     
                     <!-- Mostrar la imagen si existe -->
-                    {% if service.Imagen %}
-                        <img src="data:image/jpeg;base64,{{ service.Imagen }}" alt="{{ service.Nombre }}" class="service-image" />
+                    {% if product.Imagen %}
+                        <img src="data:image/jpeg;base64,{{ product.Imagen }}" alt="{{ product.Nombre }}" class="product-image" />
                     {% else %}
                         <p>No hay imagen disponible</p>
                     {% endif %}
                 </li>
             {% else %}
-                <li class="no-services">No hay servicios disponibles en este momento.</li>
+                <li class="no-products">No hay productos disponibles en este momento.</li>
             {% endfor %}
         </ul>
 

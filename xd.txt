@@ -1,0 +1,24 @@
+agregar 2 columnas a servicios y producto
+
+ALTER TABLE nombrebd.Tabla ADD Imagen LONGBLOB not NULL;
+ALTER TABLE nombrebd.Tabla ADD Imagen LONGBLOB not NULL;
+
+
+agregar estas 2 columnas a servicios y productos,
+
+recomendaciones : hacer un delete de las citas, productos 
+y servicios que estaban antes antes de hacer el agregado de las columasn 
+y nuevas pruebas
+
+tambien debe existir la tabla 
+ServicioProducto:
+
+
+CREATE TABLE `servicioproducto` (
+  `idServicio` int NOT NULL,
+  `idProducto` int NOT NULL,
+  PRIMARY KEY (`idServicio`,`idProducto`),
+  KEY `idProducto` (`idProducto`),
+  CONSTRAINT `servicioproducto_ibfk_1` FOREIGN KEY (`idServicio`) REFERENCES `servicio` (`idServicio`),
+  CONSTRAINT `servicioproducto_ibfk_2` FOREIGN KEY (`idProducto`) REFERENCES `producto` (`idProducto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

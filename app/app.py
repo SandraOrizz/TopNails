@@ -6,6 +6,10 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = 'mi_secreto'
 
+      # Configuración de la carpeta para las imágenes subidas
+    app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Cambia la ruta según sea necesario
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Limitar el tamaño de los archivos subidos a 16 MB
+
     app.register_blueprint(auth_routes.bp)
     app.register_blueprint(dashboard_routes.bp)
     app.register_blueprint(other_routes.bp)

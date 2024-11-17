@@ -11,6 +11,18 @@ def view_services():
         return render_template('cliente/services.html', services=services)
     except Exception as e:
         return render_template('cliente/error.html', message=f"Error al cargar servicios: {str(e)}")
+    
+@cliente_bp.route('/productos', methods=['GET'])
+def view_productos():
+    try:
+        product = ClientController.get_products()
+        return render_template('cliente/productos.html', products=product)
+    except Exception as e:
+        return render_template('cliente/productos.html', message=f"Error al cargar productos: {str(e)}")
+
+
+
+
 
 @cliente_bp.route('/schedule', methods=['POST', 'GET'])
 def schedule_appointment():

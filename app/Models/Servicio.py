@@ -1,12 +1,22 @@
 from app.db import conectar
-
+import base64
 class Servicio:
     @staticmethod
-    def create_servicio(nombre, descripcion, precio):
+    def create_servicio(nombre, descripcion, precio, imagen):
         conn = conectar()
         cursor = conn.cursor()
-        query = "INSERT INTO SERVICIO (Nombre, Descripcion, Precio) VALUES (%s, %s, %s)"
-        cursor.execute(query, (nombre, descripcion, precio))
+        
+        # Leer la imagen en binario
+        imagen_binario = None
+        if imagen:
+            imagen_binario = imagen.read()  # Leer el archivo de imagen cargado
+        
+        # Insertar el servicio junto con la imagen
+        query = """
+            INSERT INTO SERVICIO (Nombre, Descripcion, Precio, Imagen)
+            VALUES (%s, %s, %s, %s)
+        """
+        cursor.execute(query, (nombre, descripcion, precio, imagen_binario))
         conn.commit()
         cursor.close()
         conn.close()
@@ -16,15 +26,21 @@ class Servicio:
     def get_all_services():
         conn = conectar()
         cursor = conn.cursor()
-        query = "SELECT idServicio, Nombre, Descripcion, Precio FROM SERVICIO"
+        query = "SELECT idServicio, Nombre, Descripcion, Precio, Imagen FROM SERVICIO"
         cursor.execute(query)
         servicios = cursor.fetchall()
         cursor.close()
         conn.close()
         
-        # Convierte a diccionario para mejor acceso en la plantilla
+        # Convierte la imagen a base64 y devuelve los servicios con sus imágenes
         return [
-            {'idServicio': servicio[0], 'Nombre': servicio[1], 'Descripcion': servicio[2], 'Precio': servicio[3]}
+            {
+                'idServicio': servicio[0],
+                'Nombre': servicio[1],
+                'Descripcion': servicio[2],
+                'Precio': servicio[3],
+                'Imagen': base64.b64encode(servicio[4]).decode('utf-8') if servicio[4] else None  # Convertir la imagen binaria a base64
+            }
             for servicio in servicios
         ]
 

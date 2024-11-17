@@ -34,7 +34,7 @@
     <main>
         <section class="create-service">
             <h2>Crear Nuevo Producto</h2>
-            <form action="{{ url_for('admin.create_producto') }}" method="POST">
+            <form action="{{ url_for('admin.create_producto') }}" method="POST" enctype="multipart/form-data"  >
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
                     <input type="text" id="nombre" name="nombre" required>
@@ -53,6 +53,13 @@
                     </div>
                 </div>
                 
+                 <!-- Nueva sección para cargar imagen -->
+                 <div class="form-group">
+                    <label for="imagen">Imagen del Producto:</label>
+                    <input type="file" id="imagen" name="imagen" accept="image/*" required>
+
+                </div>
+
                 <button type="submit" class="btn-submit">Crear Producto</button>
             </form>
         </section>
